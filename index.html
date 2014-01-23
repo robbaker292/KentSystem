@@ -1,0 +1,61 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <title>Kent System</title>
+    <script type="text/javascript">
+      var originalHeight = 620;
+      var originalWidth = 1000;
+      
+      //drawing related constants
+      var cx = 500;
+      var originalcx = cx;
+      var cy = 315;
+      var originalcy = cy;
+      var rx = 150;
+      var ry = 150;
+      var boxSize = 30;
+
+      var high = true;
+    
+    </script>
+    <!-- <script src="/static/jquery.min.js"></script> -->
+    <script type="text/javascript" src="lib/d3.v2.js"></script>
+    <script type="text/javascript" src="lib/jquery-1.8.3.js"></script>
+    <script type="text/javascript" src="lib/jquery-ui.js"></script>
+    <link rel="stylesheet" type="text/css" href="shared.css">
+    <!--<script type="text/javascript" src="slider.js"></script> -->
+
+    <!-- HIGH -->
+    <script type="text/javascript" src="util.js"></script>
+    <script type="text/javascript" src="drawing.js"></script>
+    <script type="text/javascript" src="force.js"></script>
+    <script type="text/javascript" src="regions.js"></script>
+    <script type="text/javascript" src="zones.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+    <script type="text/javascript">
+      
+
+
+      function changeVis(data) { 
+         // showScreen('<span style="color: blue;">' + evt.data+ '</span>'); 
+         console.log(data);
+		    parseInput(data);
+
+      } 
+
+
+    </script>
+  </head>
+
+  <body>
+    <div id="header">
+    </div>
+
+    <textarea id="input" rows="5" cols="100"></textarea><input type="button" onclick="changeVis($('#input').val());" value="Redraw Vis" />
+
+  <div id="highLevel">
+
+  </div>
+  </body>
+</html> 
