@@ -10,6 +10,7 @@ function Circle(id,label,r,x,y) {
 	moved = false;
 	svg = null;
 	labelSvg = null;
+	var intersections = []; //list of circles this one intersects with
 }
 
 
@@ -246,8 +247,6 @@ function findColor(i) {
         return get_random_color();
 }
 
-
-
 function get_random_color() {
 	var letters = '0123456789ABCDEF'.split('');
 	var color = '#';
@@ -255,5 +254,87 @@ function get_random_color() {
 	        color += letters[Math.round(Math.random() * 15)];
 	}
 	return color;
+}
+
+/*
+* Performs a logical exclsuive OR
+*/
+function XOR(a, b){
+        return ( a || b ) && !( a && b );
+}
+
+/**
+ * Checks that two circles intersect
+ * @param  {Circle} c1 First circle
+ * @param  {Circle} c2 Second circle
+ * @return {boolean}    If the two circles intersect
+ */
+function checkCirclesIntersect(c1, c2) {
+	var d = Math.sqrt(Math.pow(c1.x - c2.x, 2) + Math.pow(c1.y - c2.y, 2));
+	var r = c1.r + c2.r;
+	var padding = 10;
+
+	return d > r + padding;
+
+}
+
+
+function buildIntersections() {
+	for (var i = 0; i < circles.length; i++) {
+		for (var j = 0; j < circles.length; j++) {
+			if (i == j) {
+				continue;
+			}
+			//if the two circles intersect
+			if (checkCirclesIntersect(circles[i], circles[j])) {
+				circles[i].interactions.push(circles[j]);
+			}
+		}
+	}
+}
+
+
+/**
+ * Returns that the structure of the Euler diagram is still valid
+ * @return {boolean} True if the structure is still valid. Returns false if not, with error message
+ */
+function structureChecker() {
+
+	for (var i = 0; i < circles.length; i++) {
+		//for each circle
+		var c1 = circles[i];
+		for (var j = 0; j < circles.length; j++) {
+			//for every other circle
+			var c2 = circles[j];
+
+			if (i == j) {
+				continue;
+			}
+
+			var shouldIntersect = c1.intersections.indexOf(c2) != -1; //should the circles intersect?
+			var doesIntersect = checkCirclesIntersect(c1, c2); //do the circles intersect?
+
+			if (XOR(shouldIntersect, doesIntersect)) { //if there is a discrepency
+				//print a message to the user
+				if (shouldIntersect) {
+					console.log("Circles should intersect, but don't", c1, c2);
+				} else {
+					console.log("Circles shouldn't intersect, but do", c1, c2);
+				}
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
+
+/**
+*	Prints out the intersections for each circle
+*/
+function printStructures() {
+	for (var i = 0; i < circles.length; i++) {
+		console.log("Circle: ", circles[i].id, circles[i].label, circles[i].intersections);
+	}
 }
         
