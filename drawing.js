@@ -25,7 +25,7 @@ function drawGraph(nodes, edges, rectangles, circles){
 	svg.append("g");
 	for (var i = 0; i < circles.length; i++) {
 		circle = circles[i];
-
+		console.log(circle.id, circle.label, circle);
 
 		svg.select("g")
 			.append("circle")

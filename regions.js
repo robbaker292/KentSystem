@@ -168,6 +168,7 @@ function parseCircles(input){
 			console.log("duplicate needed");
 
 			var c2 = new Circle(result[0].trim(), c.label, parseInt(result[3]), parseInt(result[1]), parseInt(result[2]));
+			c2.intersections = [];
 			c2.newCircle = false;
 			circles.push(c2);
 
@@ -534,5 +535,57 @@ function parseRemoveNodes(input) {
 
 		console.log(nodeName, nodes, rectangle);
 	}
+
+}
+
+function parseCsvTopology(input) {
+
+	$("#topInput").hide();
+	$("#topBtn").hide();
+
+	var dataArray = $.csv.toArrays(input);
+
+	for (var i = 1; i < dataArray.length; i++) {
+		var entry = dataArray[i];
+
+		console.log(entry[0], entry[1]);
+		var regionText = "";
+
+		var groups = entry[2].split("|");
+		for (var j = 0; j < groups.length; j++) {
+			//console.log(groups[j]);
+
+			var circle = findCircleLabel(groups[j]);
+			if (circle == null) {
+				var id = String.fromCharCode(circles.length + 65);
+				circle = new Circle(id, groups[j], -1, -1, -1);
+				circle.intersections = [];
+				regionText += id;
+				circles.push(circle);
+			} else {
+				var id = circle.id;
+				regionText += id;
+			}
+			circle.newCircle = true;
+			console.log(groups[j], circle);
+			
+		}
+
+		var n = new Node(entry[0], entry[1], null, regionText);
+		console.log(regionText);
+		nodes.push(n);
+
+	}
+//
+	console.log(nodes, circles);
+
+	eulerText = "";
+	for (var i = 0; i < nodes.length; i++){
+		eulerText = eulerText + nodes[i].regionText + " ";
+	}
+
+	console.log(eulerText);
+
+	conn.send(eulerText);
 
 }

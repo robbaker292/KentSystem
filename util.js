@@ -10,7 +10,7 @@ function Circle(id,label,r,x,y) {
 	moved = false;
 	svg = null;
 	labelSvg = null;
-	var intersections = []; //list of circles this one intersects with
+	intersections = []; //list of circles this one intersects with
 }
 
 
@@ -28,7 +28,8 @@ function Point(x,y) {
 }
 
 
-function Node(label,region, regionText){
+function Node(id, label,region, regionText){
+	this.id = id;
 	this.label = label;
 	x = 0.0;
 	y = 0.0;
@@ -281,13 +282,15 @@ function checkCirclesIntersect(c1, c2) {
 
 function buildIntersections() {
 	for (var i = 0; i < circles.length; i++) {
+		circles[i].intersections = [];
 		for (var j = 0; j < circles.length; j++) {
 			if (i == j) {
 				continue;
 			}
 			//if the two circles intersect
 			if (checkCirclesIntersect(circles[i], circles[j])) {
-				circles[i].interactions.push(circles[j]);
+				console.log(circles[i], circles[i].intersections);
+				circles[i].intersections.push(circles[j]);
 			}
 		}
 	}
@@ -316,7 +319,7 @@ function structureChecker() {
 
 			if (XOR(shouldIntersect, doesIntersect)) { //if there is a discrepency
 				//print a message to the user
-				if (shouldIntersect) {
+				if (!shouldIntersect) {
 					console.log("Circles should intersect, but don't", c1, c2);
 				} else {
 					console.log("Circles shouldn't intersect, but do", c1, c2);
