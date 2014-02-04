@@ -135,7 +135,7 @@ function drawGraph(nodes, edges, rectangles, circles){
 			return findNodeStartY(d, i, true);
 		})
 		.attr("id", function(d){
-			return d.label;
+			return "node" + d.id;
 		})
 		.attr("class","node")
 
@@ -210,22 +210,18 @@ function drawEdges(edges){
 		.append("line")
 		.attr("x1", function(d){
 			console.log(d);
-			return d3.select("#"+d.source.label).attr("cx");
+			return d3.select("#node"+d.source.id).attr("cx");
 		})
 		.attr("y1", function(d){
-			return d3.select("#"+d.source.label).attr("cy");
+			return d3.select("#node"+d.source.id).attr("cy");
 		})
 		.attr("x2", function(d){
-			return d3.select("#"+d.target.label).attr("cx");
+			return d3.select("#node"+d.target.id).attr("cx");
 		})
 		.attr("y2", function(d){
-			return d3.select("#"+d.target.label).attr("cy");
+			return d3.select("#node"+d.target.id).attr("cy");
 		})
-		.style("stroke", function (d){
-			//console.log(d.size);
-			var size = Math.max(200-(d.size * 10),0);
-			return "rgb(" + size + "," + size + "," + size + ")";
-		})
+		.style("stroke", "black")
 		.style("stroke-width", 2)
 		.attr("id", function(d){
 			return "edge" + d.source.label + d.target.label;

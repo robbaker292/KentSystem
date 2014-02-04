@@ -179,6 +179,19 @@ function findNode(label, nodes){
 	return null;
 }
 
+/*
+Finds a node given a id
+*/
+function findNodeId(id, nodes){
+	for (var i = 0; i < nodes.length; i++){
+		//console.log(nodes[i].label,label, nodes[i].label == label);
+		if (nodes[i].id == id) {
+			return nodes[i];
+		}
+	} 
+	return null;
+}
+
 function stringCompare(s1, s2){
 	console.log(s1.length,s2.length, s1.charAt(1));
 	if (s1.length != s2.length){
@@ -289,7 +302,7 @@ function buildIntersections() {
 			}
 			//if the two circles intersect
 			if (checkCirclesIntersect(circles[i], circles[j])) {
-				console.log(circles[i], circles[i].intersections);
+			//	console.log(circles[i], circles[i].intersections);
 				circles[i].intersections.push(circles[j]);
 			}
 		}
