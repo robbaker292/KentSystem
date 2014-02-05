@@ -320,10 +320,10 @@ function iterateGraph(nodes, edges){
 	for (var i = 0; i < nodes.length; i++){
 		var n = nodes[i];
 
-		//console.log(n.label, n.x, n.horizontal, n.y, n.vertical, t);
+		console.log(n.label, n.x, n.horizontal, n.y, n.vertical, t);
 		var ox, oy;
 
-		d3.select("#"+n.label)
+		d3.select("#node"+n.id)
 			.attr("cx", function(){
 				
 				//if node has moved to a different circle
@@ -347,25 +347,25 @@ function iterateGraph(nodes, edges){
 				
 				return oy;
 			})
-
+		console.log(n.label, n.x, n.horizontal, n.y, n.vertical, t);
 	}
 
 	
 	//move edges around
 	for (var i = 0; i < edges.length; i++){
 		e = edges[i];
-		d3.select("#edge"+e.source.label+e.target.label)
+		d3.select("#edge"+e.source.id+"-"+e.target.id)
 			.attr("x1", function(){
-				return d3.select("#"+e.source.label).attr("cx");
+				return d3.select("#node"+e.source.id).attr("cx");
 			})
 			.attr("y1", function(){
-				return d3.select("#"+e.source.label).attr("cy");
+				return d3.select("#node"+e.source.id).attr("cy");
 			})
 			.attr("x2", function(){
-				return d3.select("#"+e.target.label).attr("cx");
+				return d3.select("#node"+e.target.id).attr("cx");
 			})
 			.attr("y2", function(){
-				return d3.select("#"+e.target.label).attr("cy");
+				return d3.select("#node"+e.target.id).attr("cy");
 			});
 	}
 

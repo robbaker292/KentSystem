@@ -224,7 +224,7 @@ function drawEdges(edges){
 		.style("stroke", "black")
 		.style("stroke-width", 2)
 		.attr("id", function(d){
-			return "edge" + d.source.label + d.target.label;
+			return "edge" + d.source.id + "-" + d.target.id;
 		});
 }
 

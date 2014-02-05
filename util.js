@@ -45,19 +45,9 @@ function Edge(source, target, size){
 	this.size = size;
 }
 
-
-function Time(time){
-	this.time = time;
-	this.interactions = [];
-}
-
-function Interaction(start, end, size){
-	this.start = start;
-	this.end = end;
-	this.size = size;
-}
-
-
+/**
+*	Remove duplicates from an array
+*/
 function removeDuplicates(arr) {
 	var result = [];
 	$.each(arr, function(i, el){
@@ -207,12 +197,6 @@ function stringCompare(s1, s2){
 
 }
 
-// Generates a hash for creating unqiue circle or node IDs
-//not used
-function generateHash(s){
-	return s.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0);              
-}
-
 /*
 * Finds if two circles intersect
 */
@@ -220,6 +204,13 @@ function twoCirclesIntersect(c1, c2){
 	var distance = Math.sqrt( Math.pow(c1.x - c2.x, 2) + Math.pow(c1.y - c2.y,2) );
 	//console.log("comparing", c1, c2, c1.r, c2.r, distance, distance <= c1.r + c2.r);
 	return (distance <= c1.r + c2.r);
+}
+
+
+// Generates a hash for creating unqiue circle or node IDs
+//not used
+function generateHash(s){
+	return s.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0);              
 }
 
 /**
@@ -354,3 +345,106 @@ function printStructures() {
 	}
 }
         
+
+/*
+*	Finds all regions that the given region connects to
+*/
+function findConnectedRegions(region) {
+	var result = [];
+	for (var i = 0; i < edges.length; i++){
+		var e = edges[i];
+
+		if (e.source.region == region) {
+
+			//not interested in regions that connect to themselves
+			if (e.target.region == region) {
+				continue;
+			}
+
+			result.push(e.target.region);
+		} else if (e.target.region == region) {
+
+			result.push(e.source.region);
+		}
+	}
+	return result;
+
+}
+
+
+/**
+*	Finds the straight line distance between the centre of two regions
+*/
+function findDistanceTwoRegions(r1, r2) {
+
+	var r1xC = r1.x + (r1.width / 2);
+	var r1yC = r1.y + (r1.height / 2);
+	var r2xC = r2.x + (r2.width / 2);
+	var r2yC = r2.y + (r2.height / 2);
+
+	return Math.sqrt( Math.pow(r1xC - r2xC,2) +  Math.pow(r1yC - r2yC,2) );
+
+}
+
+
+/**
+*	finds the closeness rating of the current layout
+*/
+function findClosenessRating() {
+
+	var rating = 0;
+
+	for (var i = 0; i < rectangles.length; i++) {
+		var region = rectangles[i];
+
+		var result = findConnectedRegions(region);
+
+		for (var j = 0; j < result.length; j++) {
+			var distance = findDistanceTwoRegions(region, result[j]);
+
+			rating += (distance*distance);
+
+		}
+
+	}
+
+	return rating;
+}
+
+/**
+*	Returns the area rating of the current layout.
+*	A factor to apply to the desired area calculation is required
+*/
+function findAreaRating(factor) {
+	var result = 0;
+
+	for(var i = 0; i < rectangles.length; i++) {
+		var region = rectangles[i];
+		var actualArea = region.width * region.height;
+
+		var desiredArea = (1 + nodesInRegion(region).length) * factor;
+
+		console.log(region.label, "actual", actualArea, "desired", desiredArea);
+
+		result += Math.pow(actualArea - desiredArea, 2);
+
+	}
+	return result;
+}
+
+/**
+*	Finds the total fitness rating for the current layout
+*/
+function findFitnessRating() {
+	var closenessModifier = 1;
+	var areaModifier = 1;
+	var areaFactor = 200;
+
+	var closeness = findClosenessRating();
+	var area = findAreaRating(areaFactor);
+	var total = (closeness * closenessModifier) + (area * areaModifier);
+
+	console.log("closeness", closeness, "area", area, "total", total);
+
+	return total;
+}
