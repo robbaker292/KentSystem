@@ -84,7 +84,16 @@ function applyForceModel(){
 
 
 function parseCircles(input){
+
 	console.log(input);
+
+	//error checking
+	if (input == "") {
+		console.log("NO TOPOLOGY RETURNED FROM iCircles");
+		return;
+	}
+
+	
 	var circleFile = input.split("\n");
 	//use 1 as first row of input are labels
 	for (var i = 1; i < circleFile.length-1; i++){
@@ -133,6 +142,8 @@ function parseCircles(input){
 
 }
 
+
+/**
 function parseCsvTopology(input) {
 
 	$("#topInput").hide();
@@ -184,6 +195,7 @@ function parseCsvTopology(input) {
 	conn.send(eulerText);
 
 }
+*/
 
 function parseKentEdges(input) {
 
@@ -208,5 +220,54 @@ function parseKentEdges(input) {
 	}
 
 	drawEdges(edges);
+
+}
+
+function parseCsvTopology(input) {
+
+	$("#topInput").hide();
+	$("#topBtn").hide();
+
+	var groupArray = input.split("\n");
+
+	for (var i = 0; i < groupArray.length-1; i++) {
+		var group = groupArray[i];
+		console.log(group);		
+
+		var nodeData = group.split("	");
+
+		var id = String.fromCharCode(circles.length + 65);
+		circle = new Circle(id, nodeData[0], -1, -1, -1);
+		circle.newCircle = true;
+		circles.push(circle);
+
+		for (var j = 1; j < nodeData.length; j++) {
+			var nodeId = nodeData[j];
+			console.log(nodeId);
+
+			var node = findNodeId(nodeId, nodes);
+
+			if (node == null) {
+				//new node
+				node = new Node(nodeId, nodeId, null, id);
+				nodes.push(node);
+			} else {
+				//update membership of node
+				node.regionText += id;
+			}			
+
+		}
+
+	}
+	console.log(circles, nodes);
+
+	eulerText = "";
+	for (var i = 0; i < nodes.length; i++){
+		eulerText = eulerText + nodes[i].regionText + " ";
+	}
+
+	console.log(eulerText);
+
+	conn.send(eulerText);
 
 }
