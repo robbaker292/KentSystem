@@ -434,6 +434,7 @@ function findAreaRating(factor) {
 
 /**
 *	Finds the total fitness rating for the current layout
+*   Test push
 */
 function findFitnessRating() {
 	var closenessModifier = 1;
