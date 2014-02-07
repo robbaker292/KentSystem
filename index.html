@@ -54,8 +54,8 @@
     </div>
 
     <textarea id="topInput" rows="2" cols="100"></textarea><input type="button" id="topBtn" onclick="parseCsvTopology($('#topInput').val());" value="Topology" />
-    <textarea id="edgeInput" rows="2" cols="100"></textarea><input type="button" id="edgeBtn" onclick="parseKentEdges($('#edgeInput').val());" value="Edges" />
-
+    <textarea id="edgeInput" rows="2" cols="100"></textarea><input type="button" id="edgeBtn" onclick="parseKentEdges($('#edgeInput').val());" value="Edges" /><br>
+    <input type="button" id="edgeBtn" onclick="d3.selectAll('rect').remove();" value="Remove Rectangles" />
   <div id="highLevel">
 
   </div>
