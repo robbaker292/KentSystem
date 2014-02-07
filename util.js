@@ -182,6 +182,19 @@ function findNodeId(id, nodes){
 	return null;
 }
 
+/*
+*	Find a edge given a source and target
+*/
+function findEdge(edges, source, target) {
+	for (var i = 0; i < edges.length; i++) {
+		var edge = edges[i];
+		if (edge.source == source && edge.target == target) {
+			return edge;
+		}
+	}
+	return null;
+}
+
 function stringCompare(s1, s2){
 	console.log(s1.length,s2.length, s1.charAt(1));
 	if (s1.length != s2.length){

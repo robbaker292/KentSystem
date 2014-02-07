@@ -213,6 +213,11 @@ function parseKentEdges(input) {
 			continue;
 		}
 
+		//if this edge is already in the system, but in reverse then skip
+		if (findEdges(edges, target, source) != null) {
+			continue;
+		}
+
 		var edge = new Edge(source, target, 1);
 
 
