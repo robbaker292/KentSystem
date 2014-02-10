@@ -139,6 +139,7 @@ function parseCircles(input){
 	}
 
 	drawGraph(nodes, null, rectangles, circles);
+	calculateOverlapStats();
 
 }
 
@@ -214,7 +215,7 @@ function parseKentEdges(input) {
 		}
 
 		//if this edge is already in the system, but in reverse then skip
-		if (findEdges(edges, target, source) != null) {
+		if (findEdge(edges, target, source) != null) {
 			continue;
 		}
 

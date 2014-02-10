@@ -462,3 +462,35 @@ function findFitnessRating() {
 
 	return total;
 }
+
+/**
+*	Calculate overlap statistics
+*/
+function calculateOverlapStats() {
+	var resultArr = [];
+	for (var i = 0; i < nodes.length; i++) {
+		var intersections = nodes[i].regionText.length;
+
+		if (resultArr[intersections] == undefined) {
+			resultArr[intersections] = 1;
+		} else {
+			resultArr[intersections]++;
+		}
+	}
+
+	var resultText = "Nodes that have overlaps:<br>"
+	for (var i = 1; i < resultArr.length; i++) {
+		if (resultArr[i] == undefined) {
+			continue;
+		}
+
+		resultText += resultArr[i] + " nodes have " + i + " overlap";
+		if (i != 1) { resultText += "s"; }
+		resultText += " <br>";
+
+	}
+	$("#overlapResults").html(resultText);
+
+
+
+}

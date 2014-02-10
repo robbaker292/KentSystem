@@ -19,3 +19,7 @@ html {
 	stroke-width: 5px;
 	fill-opacity: 0.3;
 }
+
+#overlapResults {
+	font-size: 0.75em;
+}
