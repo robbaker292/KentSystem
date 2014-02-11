@@ -278,6 +278,9 @@ function parseCsvTopology(input) {
 
 }
 
+/**
+*	Redraws the rectangles and moves nodes to within their correct rectangle
+*/
 function redrawRectangles() {
 
 	zones = eulerText.split(" ");
@@ -294,4 +297,16 @@ function redrawRectangles() {
 	}
 
 	drawRectangles(rectangles, false);
+
+	for (var i = 0; i < nodes.length; i++) {
+		var n = nodes[i];
+		console.log(n, n.region);
+
+		n.x = findNodeStartX(n, i, false);
+		n.y = findNodeStartY(n, i, false);
+		d3.select("#node"+n.id).attr("cx",n.x);
+		d3.select("#node"+n.id).attr("cy",n.y);
+	}
+
 }
+
