@@ -308,5 +308,7 @@ function redrawRectangles() {
 		d3.select("#node"+n.id).attr("cy",n.y);
 	}
 
+	drawEdges(edges);
+
 }
 
