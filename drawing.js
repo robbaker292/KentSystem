@@ -74,7 +74,7 @@ function drawGraph(nodes, edges, rectangles, circles){
 
 	}
 
-	drawRectangles(true);
+	drawRectangles(rectangles, true);
 
 	k = c * Math.sqrt(800 / nodes.length);
 	//console.log(k,c, nodes.length);
@@ -147,7 +147,7 @@ function drawGraph(nodes, edges, rectangles, circles){
 	
 }
 
-function drawRectangles(multiplierSet){
+function drawRectangles(rectangles, multiplierSet){
 
 	d3.selectAll("rect").remove();
 	console.log(rectangles);

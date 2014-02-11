@@ -277,3 +277,21 @@ function parseCsvTopology(input) {
 	conn.send(eulerText);
 
 }
+
+function redrawRectangles() {
+
+	zones = eulerText.split(" ");
+	zones.pop();
+	console.log(zones);
+	zones = removeDuplicates(zones);
+	console.log(zones);
+
+	rectangles = findZoneRectangles(zones, circles);
+
+	for (var i = 0; i < nodes.length; i++) {
+		var n = nodes[i];
+		n.region = findRectangleFromLabel(n.regionText, rectangles);
+	}
+
+	drawRectangles(rectangles, false);
+}
