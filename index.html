@@ -32,6 +32,7 @@
     <script type="text/javascript" src="force.js"></script>
     <script type="text/javascript" src="regions.js"></script>
     <script type="text/javascript" src="zones.js"></script>
+    <script type="text/javascript" src="search.js"></script>
     <link rel="stylesheet" type="text/css" href="style.css">
 
     <script type="text/javascript">
@@ -56,7 +57,8 @@
     <textarea id="topInput" rows="2" cols="100"></textarea><input type="button" id="topBtn" onclick="parseCsvTopology($('#topInput').val());" value="Topology" />
     <textarea id="edgeInput" rows="2" cols="100"></textarea><input type="button" id="edgeBtn" onclick="parseKentEdges($('#edgeInput').val());" value="Edges" /><br>
     <input type="button" id="edgeBtn" onclick="d3.selectAll('rect').remove();" value="Remove Rectangles" />
-    <div id="overlapResults"></div>
+    <input type="button" id="edgeBtn" onclick="search();" value="Perform Search" />
+   <div id="overlapResults"></div>
   <div id="highLevel">
 
   </div>
