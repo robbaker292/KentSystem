@@ -112,7 +112,8 @@ function insideCircles(node){
 		//does this node's region contain this circle
 
 		//console.log(circle.label, strCircles, node.x, circle.x);
-		if (strCircles.indexOf(circle.label) != -1) {
+		//if (strCircles.indexOf(circle.label) != -1) {
+		if (node.circlesContained.indexOf(circle) != -1) {
 			//check node is inside
 			
 			//console.log(strCircles, label, circle, node, distance);
@@ -132,10 +133,10 @@ function insideCircles(node){
 
 function iterateGraph(nodes, edges){
 
-	console.log(nodes, edges);
+	//console.log(nodes, edges);
 
 	var K = 0.01; // attractive force multiplier
-	var R = 500.0; // repulsive force mutiplier
+	var R = 4000.0; // repulsive force mutiplier //Orig 500
 	var C = 500.0; // circle force multiplier
 	var F = 1.0; // final movement multiplier
 	var maxForce = 10 // force limit in horizontal or vertical
@@ -155,141 +156,151 @@ function iterateGraph(nodes, edges){
 				var n2 = nodes[j];
 
 				var distance = Math.sqrt( Math.pow(n1.x - n2.x, 2) + Math.pow(n1.y - n2.y, 2) );
-				var xDistance = n1.x - n2.x;
-				var yDistance = n1.y - n2.y;
-				
-				var absDistance = distance;
-				var absXDistance = xDistance;
-				if(absXDistance < 0) {
-					absXDistance = -xDistance;
-				}
-				var absYDistance = yDistance;
-				if(absYDistance < 0) {
-					absYDistance = -yDistance;
-				}
 
-				var xForceShare = absXDistance/(absXDistance+absYDistance);
-				var yForceShare = absYDistance/(absXDistance+absYDistance);
+				if (distance != 0) {
+					var xDistance = n1.x - n2.x;
+					var yDistance = n1.y - n2.y;
+					
+					var absDistance = distance;
+					var absXDistance = xDistance;
+					if(absXDistance < 0) {
+						absXDistance = -xDistance;
+					}
+					var absYDistance = yDistance;
+					if(absYDistance < 0) {
+						absYDistance = -yDistance;
+					}
 
-				// attractive force
-				if (nodesConnect(n1,n2)) {
+					var xForceShare = absXDistance/(absXDistance+absYDistance);
+					var yForceShare = absYDistance/(absXDistance+absYDistance);
+
+					// attractive force
+					if (nodesConnect(n1,n2)) {
+
+						if(xDistance > 0) {
+							xAttractive -= K*xForceShare*absDistance;
+						} else {
+							xAttractive += K*xForceShare*absDistance;
+						}
+
+						if(yDistance > 0) {
+							yAttractive -= K*yForceShare*absDistance;
+						} else {
+							yAttractive += K*yForceShare*absDistance;
+						}
+					}
+
+
+					// repulsive force
+					var repulsiveForce = R / (distance * distance);
+					if (repulsiveForce == NaN) {
+						repulsiveForce = 0;
+					}
 
 					if(xDistance > 0) {
-						xAttractive -= K*xForceShare*absDistance;
+						xRepulsive += repulsiveForce*xForceShare;
 					} else {
-						xAttractive += K*xForceShare*absDistance;
+						xRepulsive -= repulsiveForce*xForceShare;
 					}
 
 					if(yDistance > 0) {
-						yAttractive -= K*yForceShare*absDistance;
+						yRepulsive += repulsiveForce*yForceShare;
 					} else {
-						yAttractive += K*yForceShare*absDistance;
+						yRepulsive -= repulsiveForce*yForceShare;
 					}
 				}
-
-
-				// repulsive force
-				var repulsiveForce = R / (distance * distance);
-
-				if(xDistance > 0) {
-					xRepulsive += repulsiveForce*xForceShare;
-				} else {
-					xRepulsive -= repulsiveForce*xForceShare;
-				}
-
-				if(yDistance > 0) {
-					yRepulsive += repulsiveForce*yForceShare;
-				} else {
-					yRepulsive -= repulsiveForce*yForceShare;
-				}
-			}
+				
 			
-			// circle - node force
-			for (var k = 0; k < circles.length; k++){
-//var k = 0;
-				var circle = circles[k];
-				var distanceToCentre = Math.sqrt( Math.pow(n1.x - circle.x, 2) + Math.pow(n1.y - circle.y, 2) );
-				
-				var xDistance = n1.x - circle.x;
-				var yDistance = n1.y - circle.y;
-				
-				var absXDistance = xDistance;
-				if(absXDistance < 0) {
-					absXDistance = -xDistance;
-				}
-				var absYDistance = yDistance;
-				if(absYDistance < 0) {
-					absYDistance = -yDistance;
-				}
-				
-				var distanceToCircleBorder = distanceToCentre;
-				if(distanceToCircleBorder < circle.r) {
-					distanceToCircleBorder = circle.r - distanceToCircleBorder;
-				} else {
-					distanceToCircleBorder = distanceToCircleBorder - circle.r;
-				}
+			// circle - node force 
+			
+				for (var k = 0; k < circles.length; k++){
+	//var k = 0;
+					var circle = circles[k];
+					var distanceToCentre = Math.sqrt( Math.pow(n1.x - circle.x, 2) + Math.pow(n1.y - circle.y, 2) );
+					
+					var xDistance = n1.x - circle.x;
+					var yDistance = n1.y - circle.y;
+					
+					var absXDistance = xDistance;
+					if(absXDistance < 0) {
+						absXDistance = -xDistance;
+					}
+					var absYDistance = yDistance;
+					if(absYDistance < 0) {
+						absYDistance = -yDistance;
+					}
+					
+					var distanceToCircleBorder = distanceToCentre;
+					if(distanceToCircleBorder < circle.r) {
+						distanceToCircleBorder = circle.r - distanceToCircleBorder;
+					} else {
+						distanceToCircleBorder = distanceToCircleBorder - circle.r;
+					}
 
 
 
-				var xForceShare = absXDistance/(absXDistance+absYDistance);
-				var yForceShare = absYDistance/(absXDistance+absYDistance);
+					var xForceShare = absXDistance/(absXDistance+absYDistance);
+					var yForceShare = absYDistance/(absXDistance+absYDistance);
 
 
-				var circleForce = C / (distanceToCircleBorder * distanceToCircleBorder);
+					var circleForce = C / (distanceToCircleBorder * distanceToCircleBorder);
 
-				var	thisAbsXCircleForce = circleForce*xForceShare;
-				if(thisAbsXCircleForce < 0) {
-					thisAbsXCircleForce = -thisAbsXCircleForce;
-				}
-				
-				var	thisAbsYCircleForce = circleForce*yForceShare;
-				if(thisAbsYCircleForce < 0) {
-					thisAbsYCircleForce = -thisAbsYCircleForce;
-				}
-				
-				// sort out movement direction
-				var inside = true;
-				if(distanceToCentre > circle.r) {
-					inside = false;
-				}
-				var above = true;
-				if(n1.y > circle.y) {
-					above = false;
-				}
-				var left = true;
-				if(n1.x > circle.x) {
-					left = false;
-				}
-				
-		
-				var thisXCircleForce = 0;
-				var thisYCircleForce = 0;
-				
-				// assume inside in these tests
-				if(left) {
-					thisXCircleForce = thisAbsXCircleForce
-				} else {
-					thisXCircleForce = -thisAbsXCircleForce
-				}
-				if(above) {
-					thisYCircleForce = thisAbsYCircleForce
-				} else {
-					thisYCircleForce = -thisAbsYCircleForce
-				}
-				// reverse the direction if outside
-				if(!inside) {
-					thisXCircleForce = -thisXCircleForce;
-					thisYCircleForce = -thisYCircleForce;
-				}							
-				
-				xCircleForce += thisXCircleForce;
-				yCircleForce += thisYCircleForce;
+					var	thisAbsXCircleForce = circleForce*xForceShare;
+					if(thisAbsXCircleForce < 0) {
+						thisAbsXCircleForce = -thisAbsXCircleForce;
+					}
+					
+					var	thisAbsYCircleForce = circleForce*yForceShare;
+					if(thisAbsYCircleForce < 0) {
+						thisAbsYCircleForce = -thisAbsYCircleForce;
+					}
+					
+					// sort out movement direction
+					var inside = true;
+					if(distanceToCentre > circle.r) {
+						inside = false;
+					}
+					var above = true;
+					if(n1.y > circle.y) {
+						above = false;
+					}
+					var left = true;
+					if(n1.x > circle.x) {
+						left = false;
+					}
+					
+			
+					var thisXCircleForce = 0;
+					var thisYCircleForce = 0;
+					
+					// assume inside in these tests
+					if(left) {
+						thisXCircleForce = thisAbsXCircleForce
+					} else {
+						thisXCircleForce = -thisAbsXCircleForce
+					}
+					if(above) {
+						thisYCircleForce = thisAbsYCircleForce
+					} else {
+						thisYCircleForce = -thisAbsYCircleForce
+					}
+					// reverse the direction if outside
+					if(!inside) {
+						thisXCircleForce = -thisXCircleForce;
+						thisYCircleForce = -thisYCircleForce;
+					}							
+					
+					xCircleForce += thisXCircleForce;
+					yCircleForce += thisYCircleForce;
 
+				} 
 			}
-		}
+		} 
 		
 		var totalXForce = F*(xRepulsive + xAttractive + xCircleForce);
+		//console.log(n1.label, n2.label, "X: f", F, "rep", xRepulsive, "att", xAttractive, "cir", xCircleForce);
 		var totalYForce = F*(yRepulsive + yAttractive + yCircleForce);
+		//console.log("Y: f", F, "rep", yRepulsive, "att", yAttractive, "cir", yCircleForce);
 
 		// chop the force if it is too large
 		if(totalXForce > 0) {
@@ -320,7 +331,7 @@ function iterateGraph(nodes, edges){
 	for (var i = 0; i < nodes.length; i++){
 		var n = nodes[i];
 
-		console.log(n.label, n.x, n.horizontal, n.y, n.vertical, t);
+		//console.log(n.label, "x", n.x, "hor", n.horizontal, "y", n.y, "vert", n.vertical, "t", t);
 		var ox, oy;
 
 		d3.select("#node"+n.id)
@@ -331,7 +342,7 @@ function iterateGraph(nodes, edges){
 				if (insideCircles(n).length == 0){
 					n.x = n.x + n.horizontal;
 				}
-
+//
 				ox = parseInt(n.x);
 			
 				return ox;
@@ -347,7 +358,10 @@ function iterateGraph(nodes, edges){
 				
 				return oy;
 			})
-		console.log(n.label, n.x, n.horizontal, n.y, n.vertical, t);
+
+		//move label
+		n.labelSvg.attr("x", n.x+5).attr("y", n.y-5);
+		//console.log(n.label, "x", n.x, "hor", n.horizontal, "y", n.y, "vert", n.vertical, "t", t);
 	}
 
 	

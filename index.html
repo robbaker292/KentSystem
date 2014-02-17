@@ -57,7 +57,8 @@
     <textarea id="topInput" rows="2" cols="100"></textarea><input type="button" id="topBtn" onclick="parseCsvTopology($('#topInput').val());" value="Topology" />
     <textarea id="edgeInput" rows="2" cols="100"></textarea><input type="button" id="edgeBtn" onclick="parseKentEdges($('#edgeInput').val());" value="Edges" /><br>
     <input type="button" id="edgeBtn" onclick="d3.selectAll('rect').remove();" value="Remove Rectangles" />
-    <input type="button" id="edgeBtn" onclick="search();" value="Perform Search" />
+    <input type="button" id="searchBtn" onclick="search();" value="Perform Search" />
+    <input type="button" id="forceBtn" onclick="runForce();" value="Run Force" />
    <div id="overlapResults"></div>
   <div id="highLevel">
 

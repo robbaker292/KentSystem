@@ -38,6 +38,7 @@ function Node(id, label,region, regionText){
 	horizontal = 0;
 	vertical = 0;
 	labelSvg = null;
+	circlesContained = [];
 }
 
 function Edge(source, target, size){

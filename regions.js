@@ -77,8 +77,21 @@ function animate(){
 	,10);
 }*/
 
-function applyForceModel(){
-
+function runForce(){
+	var m = 0;
+	var interval = setInterval(
+		function() {
+			m++;
+			//console.log("m", m, "currentTime", currentTime);
+			if (m < 200) {
+				iterateGraph(nodes, edges);
+			} else {
+				window.clearInterval(interval);
+				console.log("done");
+				return;
+			}
+		}
+	,10);
 }
 
 
@@ -140,6 +153,7 @@ function parseCircles(input){
 
 	drawGraph(nodes, null, rectangles, circles);
 	calculateOverlapStats();
+	addCirclesToNodes();
 
 }
 
@@ -310,5 +324,28 @@ function redrawRectangles() {
 
 	drawEdges(edges);
 
+}
+
+/*
+*	Stores within each node, a list of circles that it is inside
+*/ 
+function addCirclesToNodes() {
+
+	for (var i = 0; i < nodes.length; i++) {
+
+		var node = nodes[i];
+		node.circlesContained = [];
+
+		for (var j = 0; j < circles.length; j++) {
+
+			var circle = circles[j];
+
+			var distance = Math.sqrt( Math.pow(node.x - circle.x, 2) + Math.pow(node.y - circle.y, 2) );
+
+			if (distance < circle.r) {
+				node.circlesContained.push(circle);
+			}
+		}
+	}
 }
 
