@@ -37,6 +37,7 @@ function Node(id, label,region, regionText){
 	this.regionText = regionText;
 	horizontal = 0;
 	vertical = 0;
+	labelSvg = null;
 }
 
 function Edge(source, target, size){
@@ -491,6 +492,87 @@ function calculateOverlapStats() {
 	}
 	$("#overlapResults").html(resultText);
 
+}
 
+function centreVis() {
 
+	var lowestX = 0;
+	var lowestY = 0;
+	var highestX = width;
+	var highestY = height;
+
+	for (var i = 0; i < circles.length; i++) {
+		var thisLowX = circles[i].x - circles[i].r;
+		var thisHighX = circles[i].x + circles[i].r;
+		var thisLowY = circles[i].y - circles[i].r;
+		var thisHighY = circles[i].y + circles[i].r;
+
+		//console.log(circles[i], thisLowX, thisLowY, thisHighX, thisHighY);
+
+		if (thisLowX < lowestX) {
+			lowestX = thisLowX;
+		}
+
+		if (thisLowY < lowestY) {
+			lowestY = thisLowY;
+		}
+		
+		if (thisHighX > highestX) {
+			highestX = thisHighX;
+		}
+
+		if (thisHighY > highestY) {
+			highestY = thisHighY;
+		}
+	}
+
+//	console.log(lowestX, lowestY, highestX, highestY);
+
+	if (Math.abs(lowestX) > highestX-width) {
+		var xOffset = lowestX - 10;
+	} else {
+		var xOffset = highestX-width + 10;
+	}
+	if (Math.abs(lowestY) > highestY-height) {
+		var yOffset = lowestY - 10;
+	} else {
+		var yOffset = highestY-height + 10;
+	}
+
+	//enlarge the size of the SVG canvas if needed
+	if (highestX - lowestX + 20 > width) {
+		d3.select("svg").attr("width", highestX - lowestX + 20);
+	}
+	if (highestY - lowestY + 20 > height) {
+		d3.select("svg").attr("height", highestY - lowestY + 20);
+	}
+
+//	console.log(xOffset, yOffset);
+
+	//adjust everything in vis
+
+	//change circles
+	for (var i = 0; i < circles.length; i++) {
+		circles[i].x -= xOffset;
+		circles[i].svg.attr("cx", circles[i].x);
+		circles[i].labelSvg.attr("x", circles[i].labelSvg.attr("x") - xOffset);
+
+		circles[i].y -= yOffset;
+		circles[i].svg.attr("cy", circles[i].y);
+		circles[i].labelSvg.attr("y", circles[i].labelSvg.attr("y") - yOffset);
+	}
+
+	for (var i = 0; i < nodes.length; i++) {
+		nodes[i].x -= xOffset;
+		d3.select("#node"+ nodes[i].id).attr("cx", nodes[i].x);
+		nodes[i].labelSvg.attr("x", nodes[i].x + 5 - xOffset);
+
+		nodes[i].y -= yOffset;
+		d3.select("#node"+ nodes[i].id).attr("cy", nodes[i].y);
+		nodes[i].labelSvg.attr("y", nodes[i].y - 5 - yOffset);
+	}
+
+	drawEdges(edges);
+	d3.selectAll('rect').remove();
+	redrawRectangles();
 }

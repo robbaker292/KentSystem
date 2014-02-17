@@ -300,12 +300,12 @@ function redrawRectangles() {
 
 	for (var i = 0; i < nodes.length; i++) {
 		var n = nodes[i];
-		console.log(n, n.region);
+		//console.log(n, n.region);
 
 		n.x = findNodeStartX(n, i, false);
 		n.y = findNodeStartY(n, i, false);
-		d3.select("#node"+n.id).attr("cx",n.x);
-		d3.select("#node"+n.id).attr("cy",n.y);
+		d3.select("#node"+n.id).attr("cx",n.x).attr("cy",n.y);
+		d3.select("#nodelabel"+n.label).attr("x",n.x+5).attr("y",n.y-5);
 	}
 
 	drawEdges(edges);

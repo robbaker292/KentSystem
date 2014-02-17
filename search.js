@@ -498,7 +498,10 @@ console.log(move+" "+better+" "+currentFitness)
 			}
 		}
 	}
-	
+
+	//moves the visualization to the centre of the SVG canvas (and extends that if needed)
+	console.log("Search done");
+	centreVis();
 	
 }
 

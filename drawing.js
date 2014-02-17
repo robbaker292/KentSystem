@@ -89,49 +89,9 @@ function drawGraph(nodes, edges, rectangles, circles){
 		.append("circle")
 		.attr("r",5)
 		.attr("cx",function (d,i){
-			
-			//var cols = Math.round(Math.sqrt(nodesInRegion(d.region).length));
-
-			//console.log(cols, d.label);
-			//console.log((i % cols)+1, i, cols, nodes.length, d.region.width, (d.region.width / (cols + 1)));
-			//var cx = ( ((i % cols)+1) * (d.region.width / (cols + 1)) ) + d.region.x;
-			 //var cx = (Math.random() * d.region.width) + d.region.x;
-			//d.x = cx* multiplier;
-			//console.log("x", d);
 			return findNodeStartX(d, i, true);
-
-			//return d.region.width * multiplier;
-			//return 10;
 		})
 		.attr("cy",function (d){
-			//console.log("y", d.region.y * multiplier);
-			//d.y = d.region.y;
-
-			//var cols = Math.round(Math.sqrt(nodesInRegion(d.region).length));
-
-			//var cy = d.region.y + ((Math.floor(i / cols)+1) * (d.region.height / (cols + 1)));
-			//console.log(cy, d.region.height, d.region.y, Math.floor(i / cols)+1 , (d.region.height / (cols + 1)));
-
-			//var i = nodesInRegion(d.region).indexOf(d);
-
-			/*
-			console.log(
-				d.region.y,
-				"i", i,
-				"cols", cols,
-				i % cols,
-				(Math.floor(i / cols)+1),
-				(d.region.height / (cols + 1)),
-				((Math.floor(i % cols)+1) * (d.region.height / (cols + 1)))
-			);
-*/
-			//var cy = ((Math.floor(i / cols)+1) * (d.region.height / (cols + 1))) + d.region.y
-
-			//var cy = (Math.random() * d.region.height) + d.region.y;
-			//var cy = d.region.y + 50;
-			//d.y = cy* multiplier;
-			//return parseInt(d.y);
-			//return 10;
 			return findNodeStartY(d, i, true);
 		})
 		.attr("id", function(d){
@@ -144,6 +104,30 @@ function drawGraph(nodes, edges, rectangles, circles){
         .text(function(d) {
                 return d.label;
         });
+
+
+   for (var i = 0; i < nodes.length; i++) {
+   		var node = nodes[i];
+
+   		d3.select("svg")
+   			.append("text")
+			.text(function(){
+				node.labelSvg = d3.select(this);
+				return node.label;
+			})
+			.attr("x", function(){
+				return node.x+5;
+			})
+			.attr("y", function(){
+				return node.y-5;
+			})
+			.attr("width", 20)
+			.attr("height", 20)
+			.attr("style", "font-weight:bold; font-size:0.6em; font-family:sans-serif;")
+			.attr("id","nodelabel"+node.id);
+
+   }
+
 	
 }
 
@@ -209,7 +193,7 @@ function drawEdges(edges){
 		.enter()
 		.append("line")
 		.attr("x1", function(d){
-			console.log(d);
+			//console.log(d);
 			return d3.select("#node"+d.source.id).attr("cx");
 		})
 		.attr("y1", function(d){
