@@ -92,6 +92,7 @@ function runForce(){
 			}
 		}
 	,10);
+	redrawNodes();
 }
 
 

@@ -79,35 +79,28 @@ function drawGraph(nodes, edges, rectangles, circles){
 	k = c * Math.sqrt(800 / nodes.length);
 	//console.log(k,c, nodes.length);
 
-	
+   for (var i = 0; i < nodes.length; i++) {
+   		var node = nodes[i];
 
-	svg.selectAll("circle")
-		.data(nodes, function(d){
-			return d;
-		})
-		.enter()
+		d3.select("svg")
 		.append("circle")
 		.attr("r",5)
 		.attr("cx",function (d,i){
-			return findNodeStartX(d, i, true);
+			return findNodeStartX(node, i, true);
 		})
-		.attr("cy",function (d){
-			return findNodeStartY(d, i, true);
+		.attr("cy",function (d, i){
+			return findNodeStartY(node, i, true);
 		})
 		.attr("id", function(d){
-			return "node" + d.id;
+			return "node" + node.id;
 		})
 		.attr("class","node")
-
 		.style("fill", "blue")
 		.append("svg:title")
         .text(function(d) {
-                return d.label;
+                return node.label;
         });
 
-
-   for (var i = 0; i < nodes.length; i++) {
-   		var node = nodes[i];
 
    		d3.select("svg")
    			.append("text")
@@ -123,6 +116,7 @@ function drawGraph(nodes, edges, rectangles, circles){
 			})
 			.attr("width", 20)
 			.attr("height", 20)
+			.attr("class","nodeLabel")
 			.attr("style", "font-weight:bold; font-size:0.6em; font-family:sans-serif;")
 			.attr("id","nodelabel"+node.id);
 
@@ -136,17 +130,17 @@ function drawRectangles(rectangles, multiplierSet){
 	d3.selectAll("rect").remove();
 	console.log(rectangles);
 	for (var i = 0; i < rectangles.length; i++) {
-	//context.fillRect(rectangles[i].x * multiplier, rectangles[i].y * multiplier, rectangles[i].width * multiplier, rectangles[i].height * multiplier);
-	//console.log(svg);
-	d3.select("svg").select("g")
-		.append("rect")
-		.attr("x", multiplierSet ? rectangles[i].x * multiplier : rectangles[i].x)
-	    .attr("y", multiplierSet ? rectangles[i].y * multiplier : rectangles[i].y)
-	    .attr("width", multiplierSet ? rectangles[i].width * multiplier : rectangles[i].width)
-	    .attr("height", multiplierSet ? rectangles[i].height * multiplier : rectangles[i].height)
-	    .attr("class","startingRect")
-	    .attr("style", "fill: rgba(0, 255, 0, 0.5)");
-}
+		//context.fillRect(rectangles[i].x * multiplier, rectangles[i].y * multiplier, rectangles[i].width * multiplier, rectangles[i].height * multiplier);
+		//console.log(svg);
+		d3.select("svg").select("g")
+			.append("rect")
+			.attr("x", multiplierSet ? rectangles[i].x * multiplier : rectangles[i].x)
+		    .attr("y", multiplierSet ? rectangles[i].y * multiplier : rectangles[i].y)
+		    .attr("width", multiplierSet ? rectangles[i].width * multiplier : rectangles[i].width)
+		    .attr("height", multiplierSet ? rectangles[i].height * multiplier : rectangles[i].height)
+		    .attr("class","startingRect")
+		    .attr("style", "fill: rgba(0, 255, 0, 0.5)");
+	}
 }
 
 function findNodeStartX(d, i, multiplierSet){
@@ -205,7 +199,7 @@ function drawEdges(edges){
 		.attr("y2", function(d){
 			return d3.select("#node"+d.target.id).attr("cy");
 		})
-		.style("stroke", "black")
+		.style("stroke", "rgb(100, 100, 100)")
 		.style("stroke-width", 2)
 		.attr("id", function(d){
 			return "edge" + d.source.id + "-" + d.target.id;
@@ -452,4 +446,60 @@ function removeNode(node) {
 	}
 
 	
+}
+
+
+/**
+*	Redraws the nodes & labels so that they appear "on top" of the vis and not behind the edges
+*/
+function redrawNodes() {
+	d3.selectAll(".node").remove();
+	d3.selectAll(".nodeLabel").remove();
+
+	d3.select("svg").selectAll("circle")
+		.data(nodes, function(d){
+			return d;
+		})
+		.enter()
+		.append("circle")
+		.attr("r",5)
+		.attr("cx",function (d,i){
+			return d.x
+		})
+		.attr("cy",function (d, i){
+			return d.y;
+		})
+		.attr("id", function(d){
+			return "node" + d.id;
+		})
+		.attr("class","node")
+
+		.style("fill", "blue")
+		.append("svg:title")
+	    .text(function(d) {
+	            return d.label;
+	    });
+
+	for (var i = 0; i < nodes.length; i++) {
+   		var node = nodes[i];
+
+   		d3.select("svg")
+   			.append("text")
+			.text(function(){
+				node.labelSvg = d3.select(this);
+				return node.label;
+			})
+			.attr("x", function(){
+				return node.x+5;
+			})
+			.attr("y", function(){
+				return node.y-5;
+			})
+			.attr("width", 20)
+			.attr("height", 20)
+			.attr("class","nodeLabel")
+			.attr("style", "font-weight:bold; font-size:0.6em; font-family:sans-serif;")
+			.attr("id","nodelabel"+node.id);
+
+   }
 }

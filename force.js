@@ -295,8 +295,32 @@ function iterateGraph(nodes, edges){
 
 				} 
 			}
+		}
+
+		if (isNaN(xRepulsive)) {
+			xRepulsive = 0;
 		} 
 		
+		if (isNaN(xAttractive)) {
+			xAttractive = 0;
+		} 
+
+		if (isNaN(xCircleForce)) {
+			xCircleForce = 0;
+		} 
+
+		if (isNaN(yRepulsive)) {
+			yRepulsive = 0;
+		} 
+
+		if (isNaN(yAttractive)) {
+			yAttractive = 0;
+		} 
+
+		if (isNaN(yCircleForce)) {
+			yCircleForce = 0;
+		} 
+
 		var totalXForce = F*(xRepulsive + xAttractive + xCircleForce);
 		//console.log(n1.label, n2.label, "X: f", F, "rep", xRepulsive, "att", xAttractive, "cir", xCircleForce);
 		var totalYForce = F*(yRepulsive + yAttractive + yCircleForce);
@@ -334,9 +358,13 @@ function iterateGraph(nodes, edges){
 		//console.log(n.label, "x", n.x, "hor", n.horizontal, "y", n.y, "vert", n.vertical, "t", t);
 		var ox, oy;
 
+		//console.log("node id", n.id, n, n.x, n.y, d3.select("#node"+n.id).attr("cx"));
+
 		d3.select("#node"+n.id)
 			.attr("cx", function(){
 				
+//console.log(n.x, ox, n.horizontal, insideCircles(n).length);
+
 				//if node has moved to a different circle
 				//console.log(insideCircles(n));
 				if (insideCircles(n).length == 0){
@@ -344,6 +372,8 @@ function iterateGraph(nodes, edges){
 				}
 //
 				ox = parseInt(n.x);
+
+				console.log(n.x, ox, n.horizontal, insideCircles(n).length);
 			
 				return ox;
 			})
