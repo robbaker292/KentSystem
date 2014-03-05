@@ -515,6 +515,9 @@ function moveCircle(circle,xMove,yMove) {
 	circleSVG.attr("cx",circle.x);
 	circleSVG.attr("cy",circle.y);
 	
+	circle.borderSvg.attr("cx",circle.x);
+	circle.borderSvg.attr("cy",circle.y);
+
 	labelSVG.attr("x",parseInt(labelSVG.attr("x"))+xMove);
 	labelSVG.attr("y",parseInt(labelSVG.attr("y"))+yMove);
 

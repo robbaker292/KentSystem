@@ -8,6 +8,7 @@ function Circle(id,label,r,x,y) {
 	this.y = y;
 	newCircle = false;
 	moved = false;
+	borderSvg = null;
 	svg = null;
 	labelSvg = null;
 	intersections = []; //list of circles this one intersects with
@@ -248,7 +249,8 @@ function removeAll(arr1, arr2){
 function findColor(i) {
 
         // colorbrewer qualitative option for 12 sets, rearranged order
-        var colorbrewerArray = ['rgb(31,120,180)','rgb(51,160,44)','rgb(255,127,0)','rgb(106,61,154)','rgb(177,89,40)',
+        //blue removed 'rgb(31,120,180)',
+        var colorbrewerArray = ['rgb(51,160,44)','rgb(255,127,0)','rgb(106,61,154)','rgb(177,89,40)',
         	'rgb(227,26,28)','rgb(166,206,227)','rgb(253,191,111)','rgb(178,223,138)','rgb(251,154,153)','rgb(202,178,214)','rgb(255,255,153)']
 
         if(i < colorbrewerArray.length) {
@@ -256,7 +258,7 @@ function findColor(i) {
         }
 
         var nextColor = i-colorbrewerArray.length;
-        var predefinedNameArray = ["blue", "magenta", "cyan", "orange",
+        var predefinedNameArray = ["magenta", "cyan", "orange",
 			"black", "green", "gray", "yellow", "pink", "purple", "red", "brown",
 			"teal", "aqua"];
 
@@ -543,9 +545,13 @@ function centreVis() {
 	//enlarge the size of the SVG canvas if needed
 	if (highestX - lowestX + 20 > width) {
 		d3.select("svg").attr("width", highestX - lowestX + 20);
+		width = highestX - lowestX + 20;
+		console.log("width changed to ", width);
 	}
 	if (highestY - lowestY + 20 > height) {
 		d3.select("svg").attr("height", highestY - lowestY + 20);
+		height = highestY - lowestY + 20;
+		console.log("height changed to ", height);
 	}
 
 //	console.log(xOffset, yOffset);
@@ -556,21 +562,23 @@ function centreVis() {
 	for (var i = 0; i < circles.length; i++) {
 		circles[i].x -= xOffset;
 		circles[i].svg.attr("cx", circles[i].x);
+		circles[i].borderSvg.attr("cx", circles[i].x);
 		circles[i].labelSvg.attr("x", circles[i].labelSvg.attr("x") - xOffset);
 
 		circles[i].y -= yOffset;
 		circles[i].svg.attr("cy", circles[i].y);
+		circles[i].borderSvg.attr("cy", circles[i].y);
 		circles[i].labelSvg.attr("y", circles[i].labelSvg.attr("y") - yOffset);
 	}
 
 	for (var i = 0; i < nodes.length; i++) {
 		nodes[i].x -= xOffset;
 		d3.select("#node"+ nodes[i].id).attr("cx", nodes[i].x);
-		nodes[i].labelSvg.attr("x", nodes[i].x + 5 - xOffset);
+		//nodes[i].labelSvg.attr("x", nodes[i].x + 5 - xOffset);
 
 		nodes[i].y -= yOffset;
 		d3.select("#node"+ nodes[i].id).attr("cy", nodes[i].y);
-		nodes[i].labelSvg.attr("y", nodes[i].y - 5 - yOffset);
+		//nodes[i].labelSvg.attr("y", nodes[i].y - 5 - yOffset);
 	}
 
 	drawEdges(edges);

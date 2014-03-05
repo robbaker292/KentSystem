@@ -15,7 +15,7 @@ html {
 	/* display: none; */
 }
 
-.euler {
+.euler, .border {
 	stroke-width: 5px;
 	fill-opacity: 0.3;
 }

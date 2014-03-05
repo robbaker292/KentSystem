@@ -1,3 +1,14 @@
+	var K = 0.01; // attractive force multiplier
+	var R = 4000.0; // repulsive force mutiplier //Orig 500
+	var C = 400.0; // circle force multiplier
+	var F = 1.0; // final movement multiplier
+
+function setMultipliers(k, r, c, f) {
+	K = k;
+	R = r;
+	C = c;
+	F = f;
+}
 
 function circleForceHorizontal(node){
 	//console.log(node);
@@ -135,10 +146,10 @@ function iterateGraph(nodes, edges){
 
 	//console.log(nodes, edges);
 
-	var K = 0.01; // attractive force multiplier
-	var R = 4000.0; // repulsive force mutiplier //Orig 500
-	var C = 500.0; // circle force multiplier
-	var F = 1.0; // final movement multiplier
+	//K = 0.01; // attractive force multiplier
+	//R = 4000.0; // repulsive force mutiplier //Orig 500
+	//C = 400.0; // circle force multiplier
+	//F = 1.0; // final movement multiplier
 	var maxForce = 10 // force limit in horizontal or vertical
 
 	for(var i = 0; i < nodes.length; i++){
@@ -373,7 +384,7 @@ function iterateGraph(nodes, edges){
 //
 				ox = parseInt(n.x);
 
-				console.log(n.x, ox, n.horizontal, insideCircles(n).length);
+				//console.log(n.x, ox, n.horizontal, insideCircles(n).length);
 			
 				return ox;
 			})
@@ -390,7 +401,7 @@ function iterateGraph(nodes, edges){
 			})
 
 		//move label
-		n.labelSvg.attr("x", n.x+5).attr("y", n.y-5);
+	//	n.labelSvg.attr("x", n.x+5).attr("y", n.y-5);
 		//console.log(n.label, "x", n.x, "hor", n.horizontal, "y", n.y, "vert", n.vertical, "t", t);
 	}
 

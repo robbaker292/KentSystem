@@ -349,13 +349,13 @@ function findZoneRectangles(zoneStrings, circles) {
 		
 		var circlesOutZone = getOutZones(circles, circlesInZone);
 
-		console.log(circlesInZone, circlesOutZone);
+		//console.log(circlesInZone, circlesOutZone);
 
 		//TODO: insert check that removes duplicate circles from InZone
 		circlesInZone = findAllIntersections(circlesInZone, zoneStrings[i]);
 		circlesOutZone = removeAll(circles, circlesInZone); //check that this is a real JS function
 
-		console.log(circlesInZone, circlesOutZone);
+		//console.log(circlesInZone, circlesOutZone);
 
 		var rectangle = findZoneRectangle(circlesInZone,circlesOutZone);
 		for (var j = 0; j < circlesInZone.length; j++){
@@ -373,7 +373,7 @@ function findAllIntersections(circlesInZone, zoneString) {
 	for (var i = 0; i < circlesInZone.length; i++) {
 		var c1 = circlesInZone[i];
 		var count = circlesIntersect(c1, circlesInZone);
-		console.log(zoneString, c1, count, zoneString.length);
+		//console.log(zoneString, c1, count, zoneString.length);
 		if (count.length == zoneString.length) {
 			//must intersect with every circle, therefore correct
 			return count;

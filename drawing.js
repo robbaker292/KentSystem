@@ -48,12 +48,47 @@ function drawGraph(nodes, edges, rectangles, circles){
 			})
 			.attr("style", function(d) {
 				var color = findColor(circle.id.charCodeAt(0)-65);
-				var output = "fill: " + color + "; stroke: " + color + ";";
-				console.log(output);
+				var output = "fill: " + color + ";";
+				//console.log(output);
 				return output;
-			});
+			})
+			.style("fill-opacity", "0.3");
 
 		//console.log(circle.svg.attr("cx"));
+	}
+	for (var i = 0; i < circles.length; i++) {
+
+		circle = circles[i];
+		//draw circles again to show borders on top
+		svg.select("g")
+			.append("circle")
+			.attr("r", function(){
+				//circle.borderSvg = d3.select(this);
+
+				//circle.r = circle.r;
+				return circle.r
+			})
+			.attr("cx",function(){
+				//circle.x = circle.x;
+				return circle.x
+			})
+			.attr("cy",function(){
+				//circle.y = circle.y;
+				return circle.y
+			})
+			.attr("class","euler")
+			.attr("class","border")
+			.attr("id", function(d){
+				circle.borderSvg = d3.select(this);
+				return "circleBorder"+circle.id;
+			})
+			.attr("style", function(d) {
+				var color = findColor(circle.id.charCodeAt(0)-65);
+				var output = "fill: none; stroke: " + color + ";";
+				console.log(output);
+				return output; 
+			})
+			.style("stroke-width", "5px");
 
 		svg.select("g")
 			.append("text")
@@ -101,7 +136,7 @@ function drawGraph(nodes, edges, rectangles, circles){
                 return node.label;
         });
 
-
+/*
    		d3.select("svg")
    			.append("text")
 			.text(function(){
@@ -119,7 +154,7 @@ function drawGraph(nodes, edges, rectangles, circles){
 			.attr("class","nodeLabel")
 			.attr("style", "font-weight:bold; font-size:0.6em; font-family:sans-serif;")
 			.attr("id","nodelabel"+node.id);
-
+*/
    }
 
 	
@@ -200,7 +235,7 @@ function drawEdges(edges){
 			return d3.select("#node"+d.target.id).attr("cy");
 		})
 		.style("stroke", "rgb(100, 100, 100)")
-		.style("stroke-width", 2)
+		.style("stroke-width", 1.5)
 		.attr("id", function(d){
 			return "edge" + d.source.id + "-" + d.target.id;
 		});
@@ -479,7 +514,7 @@ function redrawNodes() {
 	    .text(function(d) {
 	            return d.label;
 	    });
-
+/*
 	for (var i = 0; i < nodes.length; i++) {
    		var node = nodes[i];
 
@@ -501,5 +536,5 @@ function redrawNodes() {
 			.attr("style", "font-weight:bold; font-size:0.6em; font-family:sans-serif;")
 			.attr("id","nodelabel"+node.id);
 
-   }
+   }	*/
 }

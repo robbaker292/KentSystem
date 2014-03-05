@@ -10,7 +10,7 @@ var rectangles;
 var currentTime = 0;
 var eulerText = "";
 var width = 800;
-var height = 600;
+var height = 800;
 var circleEnum = { TOPOLOGY: 1, ADD : 2, REMOVE : 3};
 var circleType = circleEnum.TOPOLOGY;
 var interval; //holds force tick
@@ -251,7 +251,7 @@ function parseCsvTopology(input) {
 
 	var groupArray = input.split("\n");
 
-	for (var i = 0; i < groupArray.length-1; i++) {
+	for (var i = 0; i < groupArray.length; i++) {
 		var group = groupArray[i];
 		console.log(group);		
 
